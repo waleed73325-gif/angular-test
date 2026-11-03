@@ -1,0 +1,71 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "officer",
+      "password": "Officer@123",
+      "token": "eq-static-token",
+      "displayName": "Sara Ali"
+    }
+  ],
+  "departments": [
+    {
+      "id": "1",
+      "code": "PAY",
+      "name": "Payroll"
+    },
+    {
+      "id": "2",
+      "code": "HR",
+      "name": "HR"
+    },
+    {
+      "id": "3",
+      "code": "FIN",
+      "name": "Finance"
+    },
+    {
+      "id": "4",
+      "code": "IT",
+      "name": "IT"
+    }
+  ],
+  "equipmentRequests": [
+    {
+      "id": "1",
+      "requestNumber": "EQ-1001",
+      "employeeName": "Sara Ali",
+      "departmentId": "1",
+      "item": "Laptop",
+      "quantity": 1,
+      "estimatedCost": 2500.5,
+      "neededOn": "2026-11-15",
+      "status": "Draft",
+      "reason": "Replacement for a damaged device"
+    },
+    {
+      "id": "2",
+      "requestNumber": "EQ-1002",
+      "employeeName": "Omar Nasser",
+      "departmentId": "2",
+      "item": "Monitor",
+      "quantity": 2,
+      "estimatedCost": 800,
+      "neededOn": "2026-11-20",
+      "status": "Submitted",
+      "reason": "New hire setup"
+    },
+    {
+      "id": "3",
+      "requestNumber": "EQ-1003",
+      "employeeName": "Lina Hassan",
+      "departmentId": "3",
+      "item": "Mobile",
+      "quantity": 1,
+      "estimatedCost": 1500,
+      "neededOn": "2026-12-01",
+      "status": "Delivered",
+      "reason": ""
+    }
+  ]
+}

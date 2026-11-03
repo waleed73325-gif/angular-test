@@ -1,0 +1,70 @@
+<div class="shell-container">
+  <!-- Top Navbar -->
+  <header class="navbar">
+    <div class="navbar-brand">
+      <i class="pi pi-box brand-icon"></i>
+      <span class="app-title">{{ 'AppName' | translate }}</span>
+    </div>
+
+    <div class="navbar-actions">
+      <!-- Display Name: Sara Ali -->
+      <div class="user-badge">
+        <i class="pi pi-user user-icon"></i>
+        <span class="user-name">{{ authService.getDisplayName() }}</span>
+      </div>
+
+      <!-- Language Switcher -->
+      <button
+        type="button"
+        class="nav-btn lang-btn"
+        (click)="langService.toggleLanguage()"
+        [title]="'Shell.SwitchToLanguage' | translate"
+      >
+        <i class="pi pi-globe"></i>
+        <span>{{ 'Shell.SwitchToLanguage' | translate }}</span>
+      </button>
+
+      <!-- Logout Button -->
+      <button
+        type="button"
+        class="nav-btn logout-btn"
+        (click)="logout()"
+        [title]="'Login.Logout' | translate"
+      >
+        <i class="pi pi-sign-out"></i>
+        <span>{{ 'Login.Logout' | translate }}</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Shell Body (Sidebar + Content) -->
+  <div class="shell-body">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <a
+          routerLink="/equipment-requests"
+          routerLinkActive="active"
+          class="nav-link"
+        >
+          <i class="pi pi-list-check"></i>
+          <span>{{ 'Shell.EquipmentRequests' | translate }}</span>
+        </a>
+
+        <a
+          routerLink="/departments"
+          routerLinkActive="active"
+          class="nav-link"
+        >
+          <i class="pi pi-building"></i>
+          <span>{{ 'Shell.Departments' | translate }}</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

@@ -1,0 +1,132 @@
+<div class="page-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">{{ 'Departments.Title' | translate }}</h1>
+      <p class="page-subtitle">{{ 'Departments.Subtitle' | translate }}</p>
+    </div>
+    <button pButton type="button" icon="pi pi-plus" [label]="'Departments.AddDepartment' | translate"
+      class="p-button-primary" (click)="openAdd()">
+    </button>
+  </div>
+
+  <!-- Table -->
+  @if (loading()) {
+    <div class="loading-center">
+      <p-progressSpinner strokeWidth="4" />
+    </div>
+  } @else {
+    <div class="table-card">
+      <p-table
+        [value]="departments()"
+        [paginator]="departments().length > 10"
+        [rows]="10"
+        [rowHover]="true"
+        styleClass="p-datatable-sm"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>{{ 'Departments.Code' | translate }}</th>
+            <th>{{ 'Departments.Name' | translate }}</th>
+            <th style="width:120px; text-align:center">{{ 'Actions' | translate }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="3" style="text-align:center; color:#94a3b8; padding:2rem">
+              {{ 'Departments.NoDepartments' | translate }}
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-dept>
+          <tr>
+            <td>
+              <span class="code-badge">{{ dept.code }}</span>
+            </td>
+            <td>{{ dept.name }}</td>
+            <td>
+              <div class="action-btns">
+                <button pButton type="button" icon="pi pi-pencil"
+                  class="p-button-text p-button-sm p-button-secondary"
+                  [pTooltip]="'Edit' | translate" tooltipPosition="top"
+                  (click)="openEdit(dept)">
+                </button>
+                <button pButton type="button" icon="pi pi-trash"
+                  class="p-button-text p-button-sm p-button-danger"
+                  [pTooltip]="'Delete' | translate" tooltipPosition="top"
+                  (click)="confirmDelete(dept)">
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  }
+</div>
+
+<!-- Add / Edit Dialog -->
+<p-dialog
+  [header]="(editingId() ? 'Departments.EditDepartment' : 'Departments.AddDepartment') | translate"
+  [visible]="dialogVisible()"
+  (visibleChange)="$event ? null : closeDialog()"
+  [modal]="true"
+  [style]="{ width: '480px' }"
+  [closable]="true"
+  [draggable]="false"
+>
+  <form [formGroup]="form" (ngSubmit)="save()" autocomplete="off">
+    <!-- Code Field -->
+    <div class="dialog-field">
+      <label for="dept-code">{{ 'Departments.Code' | translate }}</label>
+      <input
+        pInputText
+        id="dept-code"
+        type="text"
+        formControlName="code"
+        [placeholder]="'Departments.CodePlaceholder' | translate"
+        style="width:100%"
+      />
+      @if (form.controls.code.touched) {
+        @if (form.controls.code.errors?.['required']) {
+          <small class="field-error">{{ 'Departments.CodeRequired' | translate }}</small>
+        } @else if (form.controls.code.errors?.['pattern']) {
+          <small class="field-error">{{ 'Departments.CodePattern' | translate }}</small>
+        } @else if (form.controls.code.errors?.['notUnique']) {
+          <small class="field-error">{{ 'Departments.CodeUnique' | translate }}</small>
+        }
+      }
+    </div>
+
+    <!-- Name Field -->
+    <div class="dialog-field">
+      <label for="dept-name">{{ 'Departments.Name' | translate }}</label>
+      <input
+        pInputText
+        id="dept-name"
+        type="text"
+        formControlName="name"
+        [placeholder]="'Departments.NamePlaceholder' | translate"
+        style="width:100%"
+      />
+      @if (form.controls.name.touched) {
+        @if (form.controls.name.errors?.['required']) {
+          <small class="field-error">{{ 'Departments.NameRequired' | translate }}</small>
+        } @else if (form.controls.name.errors?.['minlength']) {
+          <small class="field-error">{{ 'Departments.NameMinLength' | translate }}</small>
+        } @else if (form.controls.name.errors?.['notUnique']) {
+          <small class="field-error">{{ 'Departments.NameUnique' | translate }}</small>
+        }
+      }
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button pButton type="button" icon="pi pi-times" [label]="'Cancel' | translate"
+      class="p-button-text" (click)="closeDialog()" [disabled]="saving()">
+    </button>
+    <button pButton type="button" icon="pi pi-check" [label]="'Save' | translate"
+      class="p-button-primary" (click)="save()" [loading]="saving()">
+    </button>
+  </ng-template>
+</p-dialog>

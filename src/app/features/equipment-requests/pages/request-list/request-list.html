@@ -1,0 +1,108 @@
+<div class="page-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">{{ 'Requests.Title' | translate }}</h1>
+      <p class="page-subtitle">{{ 'Requests.Subtitle' | translate }}</p>
+    </div>
+    <button pButton type="button" icon="pi pi-plus"
+      [label]="'Requests.AddRequest' | translate"
+      class="p-button-primary"
+      (click)="navigateToNew()">
+    </button>
+  </div>
+
+  <!-- Filters Bar -->
+  <div class="filters-bar">
+    <p-iconfield style="flex:1; min-width:220px">
+      <p-inputIcon styleClass="pi pi-search" />
+      <input
+        pInputText
+        type="text"
+        [placeholder]="'Requests.SearchPlaceholder' | translate"
+        [ngModel]="searchText()"
+        (ngModelChange)="searchText.set($event)"
+        style="width:100%"
+      />
+    </p-iconfield>
+
+    <p-select
+      [options]="statusOptions"
+      [ngModel]="filterStatus()"
+      (ngModelChange)="filterStatus.set($event)"
+      optionLabel="label"
+      optionValue="value"
+      [style]="{ 'min-width': '170px' }"
+      [placeholder]="'Requests.FilterStatus' | translate"
+    />
+  </div>
+
+  <!-- Table -->
+  @if (loading()) {
+    <div class="loading-center">
+      <p-progressSpinner strokeWidth="4" />
+    </div>
+  } @else {
+    <div class="table-card">
+      <p-table
+        [value]="filteredRequests()"
+        [paginator]="filteredRequests().length > 10"
+        [rows]="10"
+        [rowHover]="true"
+        styleClass="p-datatable-sm"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>{{ 'Requests.RequestNumber' | translate }}</th>
+            <th>{{ 'Requests.Employee' | translate }}</th>
+            <th>{{ 'Requests.Department' | translate }}</th>
+            <th>{{ 'Requests.Item' | translate }}</th>
+            <th style="text-align:center">{{ 'Requests.Quantity' | translate }}</th>
+            <th style="text-align:end">{{ 'Requests.EstimatedCost' | translate }}</th>
+            <th>{{ 'Requests.NeededOn' | translate }}</th>
+            <th style="text-align:center">{{ 'Requests.Status' | translate }}</th>
+            <th style="width:100px; text-align:center">{{ 'Actions' | translate }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="9" style="text-align:center; color:#94a3b8; padding:2rem">
+              {{ 'Requests.NoRequests' | translate }}
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-req>
+          <tr>
+            <td>
+              <span class="req-num">{{ req.requestNumber }}</span>
+            </td>
+            <td>{{ req.employeeName }}</td>
+            <td>{{ getDeptName(req.departmentId) }}</td>
+            <td>{{ req.item }}</td>
+            <td style="text-align:center">{{ req.quantity }}</td>
+            <td style="text-align:end">{{ formatCost(req.estimatedCost) }}</td>
+            <td>{{ req.neededOn }}</td>
+            <td style="text-align:center">
+              <p-tag [value]="statusLabel(req.status)" [severity]="statusSeverity(req.status)" />
+            </td>
+            <td>
+              <div class="action-btns">
+                <button pButton type="button" icon="pi pi-pencil"
+                  class="p-button-text p-button-sm p-button-secondary"
+                  [pTooltip]="'Edit' | translate" tooltipPosition="top"
+                  (click)="navigateToEdit(req)">
+                </button>
+                <button pButton type="button" icon="pi pi-trash"
+                  class="p-button-text p-button-sm p-button-danger"
+                  [pTooltip]="'Delete' | translate" tooltipPosition="top"
+                  (click)="confirmDelete(req)"
+                  [disabled]="req.status !== 'Draft'">
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  }
+</div>

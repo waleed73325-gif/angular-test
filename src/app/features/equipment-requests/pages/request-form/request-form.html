@@ -1,0 +1,185 @@
+<div class="page-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <button pButton type="button" icon="pi pi-arrow-left" class="p-button-text p-button-secondary"
+        (click)="cancel()">
+      </button>
+      <div>
+        <h1 class="page-title">
+          {{ (isNew() ? 'Requests.AddRequest' : 'Requests.EditRequest') | translate }}
+        </h1>
+        @if (!isNew()) {
+          <p class="page-subtitle">{{ currentRequest()?.requestNumber }}</p>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center">
+      <p-progressSpinner strokeWidth="4" />
+    </div>
+  } @else {
+    <!-- Delivered Warning -->
+    @if (isDelivered()) {
+      <p-message severity="warn" [text]="'Requests.DeliveredReadOnly' | translate" styleClass="mb-info" />
+    }
+    <!-- Submitted Notice -->
+    @if (isSubmitted()) {
+      <p-message severity="info" [text]="'Requests.SubmittedRestricted' | translate" styleClass="mb-info" />
+    }
+
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <div class="form-grid">
+
+        <!-- Request Number -->
+        <div class="form-field">
+          <label for="reqNum">{{ 'Requests.RequestNumber' | translate }}</label>
+          <input pInputText id="reqNum" type="text" formControlName="requestNumber"
+            [placeholder]="'Requests.RequestNumberPlaceholder' | translate" />
+          @if (form.controls.requestNumber.touched) {
+            @if (form.controls.requestNumber.errors?.['required']) {
+              <small class="field-error">{{ 'Requests.RequestNumberRequired' | translate }}</small>
+            } @else if (form.controls.requestNumber.errors?.['pattern']) {
+              <small class="field-error">{{ 'Requests.RequestNumberPattern' | translate }}</small>
+            } @else if (form.controls.requestNumber.errors?.['notUnique']) {
+              <small class="field-error">{{ 'Requests.RequestNumberUnique' | translate }}</small>
+            }
+          }
+        </div>
+
+        <!-- Employee Name -->
+        <div class="form-field">
+          <label for="empName">{{ 'Requests.Employee' | translate }}</label>
+          <input pInputText id="empName" type="text" formControlName="employeeName"
+            [placeholder]="'Requests.EmployeePlaceholder' | translate" />
+          @if (form.controls.employeeName.touched) {
+            @if (form.controls.employeeName.errors?.['required']) {
+              <small class="field-error">{{ 'Requests.EmployeeRequired' | translate }}</small>
+            } @else if (form.controls.employeeName.errors?.['minlength']) {
+              <small class="field-error">{{ 'Requests.EmployeeMinLength' | translate }}</small>
+            }
+          }
+        </div>
+
+        <!-- Department -->
+        <div class="form-field">
+          <label>{{ 'Requests.Department' | translate }}</label>
+          <p-select
+            formControlName="departmentId"
+            [options]="departmentOptions()"
+            optionLabel="label"
+            optionValue="value"
+            [placeholder]="'Requests.SelectDepartment' | translate"
+            [style]="{ width: '100%' }"
+          />
+          @if (form.controls.departmentId.touched && form.controls.departmentId.errors?.['required']) {
+            <small class="field-error">{{ 'Requests.DepartmentRequired' | translate }}</small>
+          }
+        </div>
+
+        <!-- Item -->
+        <div class="form-field">
+          <label>{{ 'Requests.Item' | translate }}</label>
+          <p-select
+            formControlName="item"
+            [options]="itemOptions"
+            optionLabel="label"
+            optionValue="value"
+            [placeholder]="'Requests.SelectItem' | translate"
+            [style]="{ width: '100%' }"
+          />
+          @if (form.controls.item.touched && form.controls.item.errors?.['required']) {
+            <small class="field-error">{{ 'Requests.ItemRequired' | translate }}</small>
+          }
+        </div>
+
+        <!-- Quantity -->
+        <div class="form-field">
+          <label>{{ 'Requests.Quantity' | translate }}</label>
+          <p-inputNumber formControlName="quantity" [min]="1" [max]="10"
+            [useGrouping]="false" [style]="{ width: '100%' }" />
+          @if (form.controls.quantity.touched && form.controls.quantity.invalid) {
+            <small class="field-error">{{ 'Requests.QuantityRequired' | translate }}</small>
+          }
+        </div>
+
+        <!-- Estimated Cost -->
+        <div class="form-field">
+          <label>{{ 'Requests.EstimatedCost' | translate }}</label>
+          <p-inputNumber
+            formControlName="estimatedCost"
+            [minFractionDigits]="2"
+            [maxFractionDigits]="2"
+            [min]="0.01"
+            [useGrouping]="true"
+            [placeholder]="'Requests.CostPlaceholder' | translate"
+            [style]="{ width: '100%' }"
+          />
+          @if (form.controls.estimatedCost.touched) {
+            @if (form.controls.estimatedCost.errors?.['required'] || form.controls.estimatedCost.errors?.['min']) {
+              <small class="field-error">{{ 'Requests.CostRequired' | translate }}</small>
+            } @else if (form.controls.estimatedCost.errors?.['maxDecimals']) {
+              <small class="field-error">{{ 'Requests.CostRequired' | translate }}</small>
+            }
+          }
+        </div>
+
+        <!-- Needed On -->
+        <div class="form-field">
+          <label>{{ 'Requests.NeededOn' | translate }}</label>
+          <p-datepicker
+            formControlName="neededOn"
+            [minDate]="todayDate"
+            dateFormat="yy-mm-dd"
+            [showIcon]="true"
+            [style]="{ width: '100%' }"
+          />
+          @if (form.controls.neededOn.touched && form.controls.neededOn.errors?.['required']) {
+            <small class="field-error">{{ 'Requests.NeededOnRequired' | translate }}</small>
+          }
+        </div>
+
+        <!-- Status -->
+        <div class="form-field">
+          <label>{{ 'Requests.Status' | translate }}</label>
+          <p-select
+            formControlName="status"
+            [options]="statusOptions"
+            optionLabel="label"
+            optionValue="value"
+            [style]="{ width: '100%' }"
+          />
+        </div>
+
+        <!-- Reason (full width) -->
+        <div class="form-field full-width">
+          <label>{{ 'Requests.Reason' | translate }}</label>
+          <textarea
+            pTextarea
+            formControlName="reason"
+            rows="3"
+            [placeholder]="'Requests.ReasonPlaceholder' | translate"
+            style="width:100%; resize:vertical"
+          ></textarea>
+          @if (form.controls.reason.touched && form.controls.reason.errors?.['maxlength']) {
+            <small class="field-error">{{ 'Requests.ReasonMaxLength' | translate }}</small>
+          }
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button pButton type="button" icon="pi pi-times" [label]="'Cancel' | translate"
+          class="p-button-text p-button-secondary" (click)="cancel()" [disabled]="saving()">
+        </button>
+        @if (!isDelivered()) {
+          <button pButton type="submit" icon="pi pi-check" [label]="'Save' | translate"
+            class="p-button-primary" [loading]="saving()">
+          </button>
+        }
+      </div>
+    </form>
+  }
+</div>

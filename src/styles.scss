@@ -1,1 +1,106 @@
-/* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+@import "primeflex/primeflex.css";
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-size: 15px;
+  background-color: #f8fafc;
+  color: #1e293b;
+}
+
+/* Arabic RTL support */
+html[dir="rtl"] {
+  direction: rtl;
+}
+
+/* PrimeNG Table overrides */
+.p-datatable .p-datatable-thead > tr > th {
+  background-color: #f1f5f9;
+  color: #475569;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.p-datatable .p-datatable-tbody > tr:hover td {
+  background-color: #f8fafc;
+}
+
+.p-datatable .p-datatable-emptymessage td {
+  text-align: center;
+  color: #94a3b8;
+  padding: 2rem;
+}
+
+/* PrimeNG button overrides */
+.p-button-primary {
+  background-color: #0284c7 !important;
+  border-color: #0284c7 !important;
+}
+.p-button-primary:hover:not(:disabled) {
+  background-color: #0369a1 !important;
+  border-color: #0369a1 !important;
+}
+
+/* PrimeNG Dialog */
+.p-dialog .p-dialog-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.p-dialog .p-dialog-content {
+  padding: 1.25rem;
+}
+
+.p-dialog .p-dialog-footer {
+  background-color: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  padding: 0.875rem 1.25rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* Form input global */
+.p-inputtext {
+  border-radius: 0.5rem !important;
+  border-color: #cbd5e1 !important;
+  font-size: 0.9375rem !important;
+  padding: 0.65rem 0.875rem !important;
+
+  &:focus {
+    border-color: #0284c7 !important;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12) !important;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}

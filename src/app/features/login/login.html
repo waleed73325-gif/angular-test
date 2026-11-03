@@ -1,0 +1,75 @@
+<div class="login-page">
+  <div class="language-bar">
+    <button type="button" class="lang-switch-btn" (click)="langService.toggleLanguage()">
+      <i class="pi pi-globe"></i>
+      <span>{{ 'Shell.SwitchToLanguage' | translate }}</span>
+    </button>
+  </div>
+
+  <div class="login-card">
+    <div class="login-header">
+      <div class="login-logo">
+        <i class="pi pi-box"></i>
+      </div>
+      <h1>{{ 'AppName' | translate }}</h1>
+      <p>{{ 'Login.Subtitle' | translate }}</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="submitLogin()">
+      <div class="form-field">
+        <label for="username">{{ 'Login.Username' | translate }}</label>
+        <div class="input-wrapper">
+          <i class="pi pi-user field-icon"></i>
+          <input
+            id="username"
+            type="text"
+            formControlName="username"
+            [placeholder]="'Login.UsernamePlaceholder' | translate"
+            autocomplete="username"
+          />
+        </div>
+        @if (loginForm.controls.username.touched && loginForm.controls.username.invalid) {
+          <small class="field-error">
+            {{ 'Login.UsernameRequired' | translate }}
+          </small>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="password">{{ 'Login.Password' | translate }}</label>
+        <div class="input-wrapper">
+          <i class="pi pi-lock field-icon"></i>
+          <input
+            id="password"
+            type="password"
+            formControlName="password"
+            [placeholder]="'Login.PasswordPlaceholder' | translate"
+            autocomplete="current-password"
+          />
+        </div>
+        @if (loginForm.controls.password.touched && loginForm.controls.password.invalid) {
+          <small class="field-error">
+            {{ 'Login.PasswordRequired' | translate }}
+          </small>
+        }
+      </div>
+
+      @if (hasError()) {
+        <div class="error-banner" role="alert">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>{{ 'Login.InvalidCredentials' | translate }}</span>
+        </div>
+      }
+
+      <button type="submit" class="submit-btn" [disabled]="isSubmitting()">
+        @if (isSubmitting()) {
+          <i class="pi pi-spin pi-spinner"></i>
+          <span>{{ 'Login.Submitting' | translate }}</span>
+        } @else {
+          <i class="pi pi-sign-in"></i>
+          <span>{{ 'Login.Submit' | translate }}</span>
+        }
+      </button>
+    </form>
+  </div>
+</div>
